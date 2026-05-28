@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Gastos</h1>
+<div class="panel">
+  <form method="post" class="expense-form">
+    <label>Data<input type="date" name="data" value="{{ hoje }}"></label>
+    <label>Descrição<input name="descricao" placeholder="Ex: Cerveja, Coca, carne, carvão" required></label>
+    <label>Categoria<select name="categoria">{% for key, label in categorias %}<option value="{{key}}">{{label}}</option>{% endfor %}</select></label>
+    <label>Valor<input name="valor" placeholder="0,00" required></label>
+    <label>Observação<input name="observacao" placeholder="Opcional"></label>
+    <button>Lançar gasto</button>
+  </form>
+</div>
+<section class="cards small">
+  <div class="card"><span>Total bebidas lançado</span><strong>{{ total_bebidas|brl }}</strong></div>
+  <div class="card"><span>Jogadores ativos</span><strong>{{ jogadores_ativos }}</strong></div>
+  <div class="card saldo"><span>Rateio bebidas</span><strong>{{ rateio|brl }}</strong><small>por jogador ativo</small></div>
+</section>
+<div class="panel table-wrap">
+<table>
+<thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th>Ação</th></tr></thead>
+<tbody>
+{% for g in gastos %}
+<tr>
+  <td>{{ g.data }}</td><td>{{ g.descricao }}</td><td>{{ g.categoria|capitalize }}</td><td>{{ g.valor|brl }}</td>
+  <td><form method="post" action="{{ url_for('excluir_gasto', gasto_id=g.id) }}" onsubmit="return confirm('Excluir gasto?')"><button class="danger-btn">Excluir</button></form></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endblock %}

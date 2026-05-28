@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pelada do Katito - Financeiro</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <aside class="side">
+    <div class="brand">
+      <div class="ball">⚽</div>
+      <div>
+        <strong>Pelada do Katito</strong>
+        <span>Controle financeiro</span>
+      </div>
+    </div>
+    <nav>
+      <a href="{{ url_for('index') }}">Dashboard</a>
+      <a href="{{ url_for('jogadores') }}">Jogadores</a>
+      <a href="{{ url_for('mensalidades') }}">Mensalidades</a>
+      <a href="{{ url_for('gastos') }}">Gastos</a>
+      <a href="{{ url_for('relatorios') }}">Relatório</a>
+    </nav>
+  </aside>
+  <main class="main">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

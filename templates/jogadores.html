@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Jogadores</h1>
+<div class="panel">
+  <form method="post" class="inline-form">
+    <input name="nome" placeholder="Nome do jogador" required>
+    <input name="telefone" placeholder="Telefone opcional">
+    <button>Cadastrar</button>
+  </form>
+</div>
+<div class="panel table-wrap">
+<table>
+  <thead><tr><th>Nome</th><th>Telefone</th><th>Status</th><th>Ações</th></tr></thead>
+  <tbody>
+    {% for j in jogadores %}
+    <tr class="{% if not j.ativo %}off{% endif %}">
+      <td>{{ j.nome }}</td><td>{{ j.telefone or '-' }}</td><td>{{ 'Ativo' if j.ativo else 'Inativo' }}</td>
+      <td class="actions">
+        <form method="post" action="{{ url_for('toggle_jogador', jogador_id=j.id) }}"><button>{{ 'Inativar' if j.ativo else 'Ativar' }}</button></form>
+        <form method="post" action="{{ url_for('excluir_jogador', jogador_id=j.id) }}" onsubmit="return confirm('Excluir jogador?')"><button class="danger-btn">Excluir</button></form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

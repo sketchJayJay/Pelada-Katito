@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero compact no-print">
+  <div><h1>Relatório mensal</h1><p class="muted">Resumo para fechar a conta da pelada sem virar VAR financeiro.</p></div>
+  <form class="periodo" method="get">
+    <select name="mes">{% for n,nome in meses %}<option value="{{n}}" {% if n==mes %}selected{% endif %}>{{nome}}</option>{% endfor %}</select>
+    <input name="ano" value="{{ano}}" type="number"><button>Filtrar</button>
+    <button type="button" onclick="window.print()">Imprimir</button>
+  </form>
+</section>
+
+<div class="print-title"><h1>Relatório - Pelada do Katito</h1><p>{{ mes }}/{{ ano }}</p></div>
+<section class="cards">
+  <div class="card"><span>Recebido mensalidade</span><strong>{{ total_recebido|brl }}</strong></div>
+  <div class="card"><span>Gasto churrasco</span><strong>{{ total_churrasco|brl }}</strong><small>Incluso na mensalidade</small></div>
+  <div class="card"><span>Saldo da mensalidade</span><strong>{{ saldo|brl }}</strong><small>Mensalidades pagas - churrasco. Bebidas ficam fora.</small></div>
+  <div class="card"><span>Bebidas</span><strong>{{ total_bebidas|brl }}</strong><small>Rateio: {{ rateio|brl }} por jogador</small></div>
+</section>
+
+<section class="grid2">
+  <div class="panel"><h2>Pagos</h2>{% if pagos %}<ul>{% for p in pagos %}<li>{{ p.nome }}</li>{% endfor %}</ul>{% else %}<p class="muted">Nenhum pagamento.</p>{% endif %}</div>
+  <div class="panel"><h2>Atrasados</h2>{% if atrasados %}<ul class="alert-list">{% for a in atrasados %}<li>{{ a.nome }}</li>{% endfor %}</ul>{% else %}<p class="muted">Sem atrasados.</p>{% endif %}</div>
+</section>
+
+<div class="panel table-wrap"><h2>Gastos do mês</h2>
+<table>
+<thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th></tr></thead>
+<tbody>{% for g in gastos %}<tr><td>{{ g.data }}</td><td>{{ g.descricao }}</td><td>{{ g.categoria }}</td><td>{{ g.valor|brl }}</td></tr>{% endfor %}</tbody>
+</table>
+</div>
+{% endblock %}

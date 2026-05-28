@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">Painel principal</p>
+    <h1>Financeiro da Pelada do Katito</h1>
+    <p class="muted">Mensalidade, atrasos, churrasco e rateio das bebidas no mesmo campo de jogo.</p>
+  </div>
+  <form class="periodo" method="get">
+    <select name="mes">
+      {% for n,nome in meses %}<option value="{{n}}" {% if n==mes %}selected{% endif %}>{{nome}}</option>{% endfor %}
+    </select>
+    <input name="ano" value="{{ano}}" type="number">
+    <button>Ver</button>
+  </form>
+</section>
+
+<section class="cards">
+  <div class="card"><span>Jogadores ativos</span><strong>{{ total_jogadores }}</strong></div>
+  <div class="card ok"><span>Mensalidades pagas</span><strong>{{ pagos }}</strong></div>
+  <div class="card danger"><span>Em atraso</span><strong>{{ atrasados }}</strong></div>
+  <div class="card"><span>Recebido no mês</span><strong>{{ recebido|brl }}</strong></div>
+  <div class="card"><span>Gasto com churrasco</span><strong>{{ churrasco_mes|brl }}</strong><small>Incluso na mensalidade</small></div>
+  <div class="card"><span>Cerveja + Coca</span><strong>{{ bebidas_mes|brl }}</strong><small>Rateio: {{ rateio_bebidas|brl }} por jogador</small></div>
+  <div class="card saldo"><span>Saldo da mensalidade</span><strong>{{ saldo_mes|brl }}</strong><small>Mensalidades pagas - churrasco. Bebidas ficam fora.</small></div>
+</section>
+
+<section class="grid2">
+  <div class="panel">
+    <h2>⚠️ Avisos de atraso</h2>
+    {% if alertas %}
+      <ul class="alert-list">
+      {% for a in alertas %}<li>{{ a.nome }} está em atraso neste mês.</li>{% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">Nenhum atraso encontrado nesse mês. Vestiário em paz.</p>
+    {% endif %}
+  </div>
+  <div class="panel">
+    <h2>Configuração rápida</h2>
+    <form method="post" action="{{ url_for('salvar_config') }}" class="form2">
+      <label>Valor da mensalidade<input name="mensalidade" value="{{ cfg.mensalidade }}"></label>
+      <label>Dia de vencimento<input name="dia_vencimento" value="{{ cfg.dia_vencimento }}" type="number" min="1" max="28"></label>
+      <button>Salvar</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
